@@ -1,3 +1,6 @@
+
+const sortCode = require('./sortCode')
+
 let xlsx = require("xlsx")
 let wb = xlsx.readFile("TA Time Log Spring2021.xlsx", {cellDates: true})
 
@@ -6,23 +9,14 @@ let ws = wb.Sheets["Sheet1"]
 let data = xlsx.utils.sheet_to_json(ws)
 
 let new_data = data.map(record => {
-
     let sum = 0;
-
-
     let recorder, course_name, coordinator_name
 
     for (let i = 0; i < data.length; i++) {
         sum = 0;
         recorder = data[i]
         course_name = recorder["Course Name"]
-
-
-        // course_name = "PHAR 5327 - Integrated Endocrine Module"
         coordinator_name = recorder["Coordinator Name"]
-        // coordinator_name = "Dr. Aditi Marwaha"
-
-        // console.log(`course_name = ${course_name}, coordinator_name = ${coordinator_name}`)
 
         for (let j = 0; j < data.length; j++) {
             let recorders = data[j]
@@ -34,24 +28,9 @@ let new_data = data.map(record => {
         record["CourseName"] = record["Course Name"]
         record["CourseCoordinatorName"] = record["Coordinator Name"]
         record["CourseHours"] = sum.toFixed(2)
-
-        // record.course_name = course_name
-        // record.coordinator_name = coordinator_name
-        // record.CourseHours = sum.toFixed(2)
-
-
-        // console.log(`course_name : ${course_name}, coordinator_name : ${coordinator_name}, CourseHours : ${sum.toFixed(2)}`)
-        // break ;
-
-
     }
-
-
     return record;
-
 })
-
-// console.log(new_data)
 
 function compare_item(a, b) {
     // a should come before b in the sorted order
@@ -66,9 +45,8 @@ function compare_item(a, b) {
     }
 }
 
-new_data = new_data.sort(compare_item)
-//
-// console.log(new_data)
+// new_data = new_data.sort(compare_item)
+new_data = sortCode(new_data, "CourseName")
 
 let uniqueChars = [];
 new_data.forEach((c) => {
