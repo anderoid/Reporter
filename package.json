@@ -1,7 +1,6 @@
 {
   "name": "yover",
   "version": "1.0.0",
-  "description": "",
   "main": "TA User TotalHoursFinal Spring.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +9,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "swagger-jsdoc": "^6.0.1",
+    "swagger-ui": "^3.49.0",
+    "swagger-ui-express": "^4.1.6",
     "xlsx": "^0.17.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anderoid/College_TA_Reports.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anderoid/College_TA_Reports/issues"
+  },
+  "homepage": "https://github.com/anderoid/College_TA_Reports#readme",
+  "description": ""
 }

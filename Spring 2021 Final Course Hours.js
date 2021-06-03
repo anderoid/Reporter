@@ -1,3 +1,5 @@
+const sortCode = require('./sortCode')
+
 let xlsx = require("xlsx")
 let wb = xlsx.readFile("TA Time Log Spring2021.xlsx", {cellDates: true})
 
@@ -26,20 +28,9 @@ let new_data = data.map(record => {
 
 })
 
-function compare_item(a, b){
-    // a should come before b in the sorted order
-    if(a["Course Name"] < b["Course Name"]){
-        return -1;
-        // a should come after b in the sorted order
-    }else if(a["Course Name"] > b["Course Name"]){
-        return 1;
-        // and and b are the same
-    }else{
-        return 0;
-    }
-}
 
-new_data = new_data.sort(compare_item)
+
+new_data = sortCode(new_data, "Course Name")
 
 let uniqueChars = [];
 new_data.forEach((c) => {
@@ -66,4 +57,4 @@ let newWb = xlsx.utils.book_new();
 let newWS = xlsx.utils.json_to_sheet(uniqueChars)
 xlsx.utils.book_append_sheet(newWb, newWS, "New Data");
 
-xlsx.writeFile(newWb, "Spring 2021 Final Course Hours.xlsx");
+xlsx.writeFile(newWb, "./outputFiles/Spring 2021 Final Course Hours.xlsx");
