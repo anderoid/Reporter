@@ -1,66 +1,57 @@
-
-const sortCode = require('./sortCode')
-
-let xlsx = require("xlsx")
-let wb = xlsx.readFile("TA Time Log Spring2021.xlsx", {cellDates: true})
-
-let ws = wb.Sheets["Sheet1"]
-
-let data = xlsx.utils.sheet_to_json(ws)
-
-let new_data = data.map(record => {
-    let sum = 0;
-    let recorder, course_name, coordinator_name
-
-    for (let i = 0; i < data.length; i++) {
-        sum = 0;
-        recorder = data[i]
-        course_name = recorder["Course Name"]
-        coordinator_name = recorder["Coordinator Name"]
-
-        for (let j = 0; j < data.length; j++) {
-            let recorders = data[j]
-            // if (recorders["Course Name"] === course_name && recorders["Coordinator Name"] === coordinator_name) {
-            if (recorders["Course Name"] === record["Course Name"] && recorders["Coordinator Name"] === record["Coordinator Name"]) {
-                sum = sum + recorders["Total Course Hours"]
-            }
-        }
-        record["CourseName"] = record["Course Name"]
-        record["CourseCoordinatorName"] = record["Coordinator Name"]
-        record["CourseHours"] = sum.toFixed(2)
-    }
-    return record;
-})
+const course_hours_course_cordinator = (term) => {
+    const sortCode = require('./sortCode')
+    const excel_outputWriter = require('../utils/excel_util_output_writer.js')
+    let new_data = require('../utils/term_data_returner')(term)
 
 
+    new_data = new_data.map(record => {
+        let sum = 0;
+        let recorder, course_name, coordinator_name
 
-// new_data = new_data.sort(compare_item)
-new_data = sortCode(new_data, "CourseName")
+        for (let i = 0; i < new_data.length; i++) {
+            sum = 0;
+            recorder = new_data[i]
+            course_name = recorder["Course Name"]
+            coordinator_name = recorder["Coordinator Name"]
 
-let uniqueChars = [];
-new_data.forEach((c) => {
-
-    let count = 0
-    if (!uniqueChars.includes(c['Work Performed'])) {
-        for (let i = 0; i < uniqueChars.length; i++) {
-            if (uniqueChars[i]["CourseCoordinatorName"] === c['CourseCoordinatorName'] && uniqueChars[i]["CourseName"] === c["CourseName"]) {
-                count++;
-            }
-        }
-        if (count === 0) {
-            uniqueChars.push(
-                {
-                    'CourseName': c['CourseName'],
-                    'CourseCoordinatorName': c['CourseCoordinatorName'],
-                    'CourseHours': Number(c['CourseHours'])
+            for (let j = 0; j < new_data.length; j++) {
+                let recorders = new_data[j]
+                // if (recorders["Course Name"] === course_name && recorders["Coordinator Name"] === coordinator_name) {
+                if (recorders["Course Name"] === record["Course Name"] && recorders["Coordinator Name"] === record["Coordinator Name"]) {
+                    sum = sum + recorders["Total Course Hours"]
                 }
-            );
+            }
+            record["CourseName"] = record["Course Name"]
+            record["CourseCoordinatorName"] = record["Coordinator Name"]
+            record["CourseHours"] = sum.toFixed(2)
         }
-    }
-});
-let newWb = xlsx.utils.book_new();
+        return record;
+    })
+    new_data = sortCode(new_data, "CourseName")
 
-let newWS = xlsx.utils.json_to_sheet(uniqueChars)
-xlsx.utils.book_append_sheet(newWb, newWS, "New Data");
+    let uniqueChars = [];
+    new_data.forEach((c) => {
 
-xlsx.writeFile(newWb, "./outputFiles/Spring 2021 Course Hours with Coures Cordinator Final.xlsx");
+        let count = 0
+        if (!uniqueChars.includes(c['CourseCoordinatorName'])) {
+            uniqueChars.forEach((unique_record) => {
+                if (unique_record["CourseCoordinatorName"] === c["CourseCoordinatorName"] && unique_record["CourseName"] === c["CourseName"])
+                    count += 1
+            })
+
+
+            if (count === 0) {
+                uniqueChars.push(
+                    {
+                        'CourseName': c['CourseName'],
+                        'CourseCoordinatorName': c['CourseCoordinatorName'],
+                        'CourseHours': Number(c['CourseHours'])
+                    }
+                );
+            }
+        }
+    });
+    excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`)
+
+}
+module.exports = course_hours_course_cordinator

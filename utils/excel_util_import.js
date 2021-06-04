@@ -5,8 +5,6 @@ let xlsx = require("xlsx")
 const excel_utils = ()=> {
     let main_directory_file_xcel_path = path.join(__dirname, '..', 'mainFile')
 
-    console.log(main_directory_file_xcel_path)
-
     const files = fs.readdirSync(main_directory_file_xcel_path)
 
     for (const file of files) {
@@ -14,12 +12,8 @@ const excel_utils = ()=> {
             main_directory_file_xcel_path = path.join(main_directory_file_xcel_path, file)
     }
 
-    console.log(main_directory_file_xcel_path)
-
     let wb = xlsx.readFile(main_directory_file_xcel_path, {cellDates: true})
     let ws = wb.Sheets["Sheet1"]
-    let data = xlsx.utils.sheet_to_json(ws)
-
-    return data
+    return xlsx.utils.sheet_to_json(ws)
 }
 module.exports = excel_utils

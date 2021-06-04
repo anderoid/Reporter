@@ -1,55 +1,44 @@
-const sortCode = require('./sortCode')
+const Ta_work_performedFinal = (term) => {
+    const sortCode = require('./sortCode')
+    const excel_outputWriter = require('../utils/excel_util_output_writer.js')
 
-let xlsx = require("xlsx")
-let wb = xlsx.readFile("./mainFile/TA Time Log Spring2021.xlsx", {cellDates: true})
+    let new_data = require('../utils/term_data_returner')(term)
 
-let ws = wb.Sheets["Sheet1"]
+    new_data = new_data.map(record => {
+        let sum = 0;
 
-let data = xlsx.utils.sheet_to_json(ws)
+        new_data.forEach((recorder) => {
+            if (record["Work Performed"] === recorder["Work Performed"])
+                sum = sum + recorder["Total Course Hours"]
+        })
 
-let new_data = data.map(record => {
-    let sum = 0;
+        record["Work Performed"] = record["Work Performed"]
+        record["Hours"] = sum
+        return record;
+    })
 
-    for (let i = 0; i < data.length; i++) {
-        let recorder = data[i]
-        if (record["Work Performed"] === recorder["Work Performed"]) {
-            sum = sum + recorder["Total Course Hours"]
-        }
-    }
+    new_data = sortCode(new_data, "Work Performed")
 
-    record["Work Performed"] = record["Work Performed"]
-    record["Hours"] = sum.toFixed(2)
+    let uniqueChars = [];
+    new_data.forEach((c) => {
+        let count = 0
+        if (!uniqueChars.includes(c['Work Performed'])) {
 
-
-    return record;
-
-})
-
-new_data = sortCode(new_data, "Work Performed")
-
-let uniqueChars = [];
-new_data.forEach((c) => {
-
-    let count = 0
-    if (!uniqueChars.includes(c['Work Performed'])) {
-        for (let i = 0; i < uniqueChars.length; i++) {
-            if (uniqueChars[i]["Work Performed"] === c['Work Performed']) {
-                count++;
+            uniqueChars.forEach((unique_record) => {
+                if (unique_record["Work Performed"] === c['Work Performed'])
+                    count += 1
+            })
+            if (count === 0) {
+                uniqueChars.push(
+                    {
+                        'Work Performed': c['Work Performed'],
+                        'Hours': Number(c['Hours'])
+                    }
+                );
             }
         }
-        if (count === 0) {
-            uniqueChars.push(
-                {
-                    'Work Performed': c['Work Performed'],
-                    'Hours': Number(c['Hours'])
-                }
-            );
-        }
-    }
-});
-let newWb = xlsx.utils.book_new();
+    });
 
-let newWS = xlsx.utils.json_to_sheet(uniqueChars)
-xlsx.utils.book_append_sheet(newWb, newWS, "New Data");
-
-xlsx.writeFile(newWb, "./outputFiles/TA Work Performed Final 2.xlsx");
+    excel_outputWriter(uniqueChars, `TA Work Performed Final 21.xlsx`)
+}
+module.exports = Ta_work_performedFinal

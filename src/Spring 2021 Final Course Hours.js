@@ -1,60 +1,38 @@
-const sortCode = require('./sortCode')
+const final_course_hours = (term) => {
+    const sortCode = require('./sortCode')
+    const excel_outputWriter = require('../utils/excel_util_output_writer.js')
+    let new_data = require('../utils/term_data_returner')(term)
 
-let xlsx = require("xlsx")
-let wb = xlsx.readFile("TA Time Log Spring2021.xlsx", {cellDates: true})
+    new_data = new_data.map(record => {
+        let sum = 0;
+        new_data.forEach((recorder) => {
+            if (record["Course Name"] === recorder["Course Name"])
+                sum = sum + recorder["Total Course Hours"]
+        })
+        record["Course Hours"] = sum.toFixed(2)
+        return record;
+    })
+    new_data = sortCode(new_data, "Course Name")
 
-let ws = wb.Sheets["Sheet1"]
-
-let data = xlsx.utils.sheet_to_json(ws)
-
-let new_data = data.map(record => {
-    let sum = 0;
-
-    let course_name = ""
-
-
-    for (let i = 0; i < data.length; i++) {
-        let recorder = data[i]
-        if (record["Course Name"] === recorder["Course Name"]) {
-            sum = sum + recorder["Total Course Hours"]
-        }
-    }
-
-
-    record["Course Hours"] = sum.toFixed(2)
-
-
-    return record;
-
-})
-
-
-
-new_data = sortCode(new_data, "Course Name")
-
-let uniqueChars = [];
-new_data.forEach((c) => {
-
-    let count = 0
-    if (!uniqueChars.includes(c['Course Name'])) {
-        for (let i = 0; i < uniqueChars.length; i++) {
-            if (uniqueChars[i]["Course Name"] === c['Course Name']) {
-                count++;
+    let uniqueChars = [];
+    new_data.forEach((c) => {
+        let count = 0
+        if (!uniqueChars.includes(c['Course Name'])) {
+            uniqueChars.forEach((unique_record) => {
+                if (unique_record["Course Name"] === c["Course Name"])
+                    count += 1
+            })
+            if (count === 0) {
+                uniqueChars.push(
+                    {
+                        'Course Name': c['Course Name'],
+                        'Course Hours': Number(c['Course Hours'])
+                    }
+                );
             }
         }
-        if (count === 0) {
-            uniqueChars.push(
-                {
-                    'Course Name': c['Course Name'],
-                    'Course Hours': Number(c['Course Hours'])
-                }
-            );
-        }
-    }
-});
-let newWb = xlsx.utils.book_new();
+    });
+    excel_outputWriter(uniqueChars, `${term} 2021 Final Course Hours .xlsx`)
+}
 
-let newWS = xlsx.utils.json_to_sheet(uniqueChars)
-xlsx.utils.book_append_sheet(newWb, newWS, "New Data");
-
-xlsx.writeFile(newWb, "./outputFiles/Spring 2021 Final Course Hours.xlsx");
+module.exports = final_course_hours
