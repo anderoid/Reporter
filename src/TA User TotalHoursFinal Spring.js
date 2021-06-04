@@ -1,25 +1,51 @@
+let xlsx = require("xlsx")
+const path = require('path')
+const fs = require('fs')
+
+
 const sortCode = require('./sortCode')
 
-let xlsx = require("xlsx")
-let wb = xlsx.readFile("TA Time Log Spring2021.xlsx", {cellDates: true})
+let term = 'summer'.toLowerCase()
 
+
+let term_info = require('./term_info.js')()
+
+
+console.log(term_info)
+
+
+let main_directory_file_xcel_path = path.join(__dirname, '..', 'mainFile')
+
+const files = fs.readdirSync(main_directory_file_xcel_path)
+
+for (const file of files) {
+    if (path.extname(file) === '.xlsx')
+        main_directory_file_xcel_path = path.join(main_directory_file_xcel_path, file)
+}
+
+console.log(main_directory_file_xcel_path)
+
+let wb = xlsx.readFile(main_directory_file_xcel_path, {cellDates: true})
 let ws = wb.Sheets["Sheet1"]
-
 let data = xlsx.utils.sheet_to_json(ws)
 
-
-// let term_details = [
-//     {
-//         term_name: 'Summer',
-//         term_start_date: new Date('01/01/2021'),
-//         term_end_month: new Date('')
-//     }
-// ]
 
 let new_data = data.map((record, index) => {
 
     // console.log(record["Date"])
     let month_of_time_log = record["Date"].getMonth()
+    let start_month, end_month
+
+    term_info.forEach(termer => {
+
+        if (termer.term === term) {
+            start_month = term.start_month
+            end_month = term.end_month
+        }
+    })
+
+    console.log(`start_month = ${start_month}`)
+    console.log(`end_month = ${end_month}`)
 
     if (month_of_time_log >= 0 && month_of_time_log <= 4) {
         let sum = 0;
@@ -82,5 +108,5 @@ let newWb = xlsx.utils.book_new();
 let newWS = xlsx.utils.json_to_sheet(uniqueChars)
 xlsx.utils.book_append_sheet(newWb, newWS, "New Data");
 
-xlsx.writeFile(newWb, "./outputFiles/TA User TotalHoursFinal Spring.xlsx");
+xlsx.writeFile(newWb, "../outputFiles/TA User TotalHoursFinal Spring.xlsx");
 console.log("Generated TA User TotalHoursFinal Spring.xlsx");

@@ -16,7 +16,7 @@ const swaggerOptions = {
             title: 'TA Auto Generation Tool',
             description: 'Tool to generate TA Reports',
             contact: {
-                name: `Surya Kurella`
+                name: `Boomer`
             },
             servers: [`http://localhost:5000/customers`]
         }
@@ -44,16 +44,9 @@ app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs))
  *                    name: upfile
  *                    type: file
  *                    description: The file to upload.
- *              requestBody:
- *                  content:
- *                      application/json:
- *
  *              responses:
  *                  '200':
  *                      description:"File Uploaded Succesfullylly"
- *                  '500':
- *                      description:"Frigging Failed"
- *              x-swagger-router-controller: "Default"
  *
  *
  */
@@ -65,7 +58,7 @@ app.post('/api-docs', (req, res) => {
     console.log(file)
 
 
-console.log("Hey I m here bro ")
+    console.log("Hey I m here bro ")
 
     res.status(201).send()
 

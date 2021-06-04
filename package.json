@@ -1,7 +1,7 @@
 {
   "name": "yover",
   "version": "1.0.0",
-  "main": "TA User TotalHoursFinal Spring.js",
+  "main": "src/TA User TotalHoursFinal Spring.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
