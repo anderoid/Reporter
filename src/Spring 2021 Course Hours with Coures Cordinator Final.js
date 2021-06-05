@@ -1,9 +1,7 @@
-const course_hours_course_cordinator = (term) => {
+const course_hours_course_cordinator = (term, year) => {
     const sortCode = require('./sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
     let new_data = require('../utils/term_data_returner')(term)
-
-    console.log(new_data)
 
 
     new_data = new_data.map(record => {
@@ -53,7 +51,7 @@ const course_hours_course_cordinator = (term) => {
             }
         }
     });
-    excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`)
+    excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`, term)
 
 }
 module.exports = course_hours_course_cordinator

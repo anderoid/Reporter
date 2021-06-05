@@ -32,7 +32,7 @@ const final_course_hours = (term) => {
             }
         }
     });
-    excel_outputWriter(uniqueChars, `${term} 2021 Final Course Hours .xlsx`)
+    excel_outputWriter(uniqueChars, `${term} 2021 Final Course Hours .xlsx`, term)
 }
 
 module.exports = final_course_hours

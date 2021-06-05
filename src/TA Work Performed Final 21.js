@@ -39,6 +39,6 @@ const Ta_work_performedFinal = (term) => {
         }
     });
 
-    excel_outputWriter(uniqueChars, `TA Work Performed Final 21.xlsx`)
+    excel_outputWriter(uniqueChars, `TA Work Performed Final 21.xlsx`, term)
 }
 module.exports = Ta_work_performedFinal
