@@ -3,6 +3,8 @@ const course_hours_course_cordinator = (term) => {
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
     let new_data = require('../utils/term_data_returner')(term)
 
+    console.log(new_data)
+
 
     new_data = new_data.map(record => {
         let sum = 0;

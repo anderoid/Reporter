@@ -1,84 +1,57 @@
-const express = require('express')
-const swaggerJsDoc = require('swagger-jsdoc')
-const swaggerUi = require('swagger-ui-express')
-let router = express.Router();
-const fs = require('fs')
-const app = express()
 
 
-const port = process.env.PORT || 5000;
-
-const swaggerOptions = {
-
-    swaggerDefinition: {
-
-        info: {
-            title: 'TA Auto Generation Tool',
-            description: 'Tool to generate TA Reports',
-            contact: {
-                name: `Surya Kurella`
-            },
-            servers: [`http://localhost:5000/api-docs`]
-        }
-    },
-    apis: ["serverTest.js"]
-}
-
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-
-//Routes
 /**
  * @swagger
  * /api-docs:
  *  consumes:
  *      - multipart/form-data
+ *      - binary
  *  post:
- *              summary: Uploads a file.
- *              consumes:
- *                  - multipart/form-data
- *              parameters:
- *                  - in: formData
- *                    name: upfile
- *                    type: file
- *                    description: The file to upload.
- *              requestBody:
- *                  content:
- *                      application/json:
+ *      summary: Uploads a file.
+ *      consumes:
+ *               - multipart/form-data
+ *               - binary
+ *      produces: application/octet-stream
+ *      parameters:
+ *          - in: formData
+ *            name: upfile
+ *            type: file
+ *            description: The file to upload.
+ *            required: true
+ *            schema:
+ *              type: string
+ *              format: file
+ *      responses:
+ *          '200':
+ *              description: 'File Uploaded Succesfully'
+ *              schema:
+ *                      type: string
+ *                      format: binary
  *
- *              responses:
- *                  '200':
- *                      description:"File Uploaded Succesfullylly"
- *                  '500':
- *                      description:"Frigging Failed"
- *              x-swagger-router-controller: "Default"
+ *
+ *      requestBody:
+ *          content:
+ *              application/octet-stream:
+ *                  schema:
+ *                      type: string
+ *                      format: binary
+ *      x-swagger-router-controller: "Default"
+ *
  *
  *
  */
+
+// app.get('/', (req, res)=>{
+//     console.log("Hola")
+// })
 app.post('/api-docs', (req, res) => {
 
-    console.log(req)
-
-    const file = req.body
-    console.log(file)
-
-
-console.log("Hey I m here bro ")
-
-    res.status(201).send()
-
+    if(req.files){
+        console.log("Hola Bro")
+    }
 })
 
 app.listen(port, () => {
 
     console.log(`Server is listening on port ${port}`)
 })
-
-
-// *  get:
-// *    description: Use to request all customers
-// *    responses:
-// *      '200':
-// *          description: A success
