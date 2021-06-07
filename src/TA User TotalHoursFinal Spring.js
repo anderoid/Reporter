@@ -1,8 +1,8 @@
-const TA_user_total_hours_final = (term) => {
+const TA_user_total_hours_final = (term, year) => {
 
-    const sortCode = require('./sortCode')
+    const sortCode = require('../utils/sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
-    let new_data = require('../utils/term_data_returner')(term)
+    let new_data = require('../utils/term_data_returner')(term, year)
 
     new_data = new_data.map(record => {
         let sum = 0;

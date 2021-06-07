@@ -1,7 +1,10 @@
 const course_hours_course_cordinator = (term, year) => {
-    const sortCode = require('./sortCode')
+
+    console.log(`year in course_hours_course_cordinator = ${year}`)
+
+    const sortCode = require('../utils/sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
-    let new_data = require('../utils/term_data_returner')(term)
+    let new_data = require('../utils/term_data_returner')(term, year)
 
 
     new_data = new_data.map(record => {
@@ -51,7 +54,47 @@ const course_hours_course_cordinator = (term, year) => {
             }
         }
     });
-    excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`, term)
+
+
+
+
+    const object_holder = []
+
+
+    let record;
+    let next_record;
+    let end, start
+    for (let i = 0; i < uniqueChars.length; i++) {
+
+        let j = i + 1
+
+        record = uniqueChars[i]
+        next_record = uniqueChars[j]
+
+        while (j < uniqueChars.length && record["CourseName"] === uniqueChars[j]["CourseName"]) {
+
+            j++;
+
+        }
+        start = i;
+        end = j;
+
+        object_holder.push({
+
+            s: {
+                r: start + 1, c: 0
+            },
+            e: {
+                r: end, c: 0
+            }
+        })
+
+        // console.log(object_holder)
+
+
+    }
+    console.log(object_holder)
+    excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`, term, object_holder)
 
 }
 module.exports = course_hours_course_cordinator

@@ -6,9 +6,6 @@ const bodyParser = require('body-parser');
 const fs = require("fs");
 
 const app = express()
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(bodyParser.raw());
 
 app.use(fileUpload())
 const port = process.env.PORT || 5000;
@@ -16,25 +13,12 @@ const port = process.env.PORT || 5000;
 
 const path = '../mainFile'
 
-fs.readdir(path, function (err, files) {
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    }
-    files.forEach(function (file) {
-        try {
-            fs.unlinkSync(path + `/${file}`)
-        } catch (err) {
-            console.error(err)
-        }
-    });
-});
-
 
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'TA Auto Generation Tool',
-            description: 'Tool to generate TA Reports',
+            title: 'UH College of Pharmacy TA Hours Auto Generation Tool',
+            description: 'This tool can generate 4 files based on a TA Input File',
             contact: {
                 name: `Surya Kurella`
             },
@@ -50,20 +34,29 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 
-let first_date = new Date();
-
-
 app.post('/my-file-catcher', (req, res) => {
 
-
-    // console.log(req)
+    fs.readdir(path, function (err, files) {
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        files.forEach(function (file) {
+            try {
+                fs.unlinkSync(path + `/${file}`)
+            } catch (err) {
+                console.error(err)
+            }
+        });
+    });
 
 
     if (req.files) {
         const term = req.query.term.toLowerCase()
-        const year = req.query.year
+        const year = Number(req.query.year)
 
         console.log(`term : ${term} , year : ${year}`)
+
+        let first_date = new Date();
 
 
         const makeRequest = () => {
@@ -77,26 +70,30 @@ app.post('/my-file-catcher', (req, res) => {
         async function code_runner() {
             await makeRequest()
             try {
-                const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(term)
-                const final_course_hours = require('./Spring 2021 Final Course Hours')(term)
-                const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(term)
-                const ta_work_performed_final = require('./TA Work Performed Final 21')(term)
+                const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(term, year)
+                const final_course_hours = require('./Spring 2021 Final Course Hours')(term, year)
+                const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(term, year)
+                const ta_work_performed_final = require('./TA Work Performed Final 21')(term, year)
+
+                res.send("ok")
             } catch (e) {
                 console.log("Incorrect File Sent here ")
+                res.send("Incorrect File Format Detected")
             }
         }
 
         code_runner()
-        res.send("ok")
+
+
+        let last_date = new Date();
+
+        console.log(`files generated in ${last_date - first_date} ms`)
     }
 })
 
-let last_date = new Date();
-
-console.log(`files generated in ${last_date - first_date} ms`)
-
 
 app.listen(port, () => {
+
 
     console.log(`Server is listening on port ${port}`)
 })
@@ -145,7 +142,7 @@ app.listen(port, () => {
  *
  *      responses:
  *          '200':
- *              description: 'File Uploaded Successfully'
+ *              description: 'File, data received Successfully'
  *              schema:
  *                      type: string
  *                      format: binary

@@ -1,7 +1,7 @@
-const final_course_hours = (term) => {
-    const sortCode = require('./sortCode')
+const final_course_hours = (term, year) => {
+    const sortCode = require('../utils/sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
-    let new_data = require('../utils/term_data_returner')(term)
+    let new_data = require('../utils/term_data_returner')(term, year)
 
     new_data = new_data.map(record => {
         let sum = 0;

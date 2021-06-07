@@ -2,8 +2,7 @@ let xlsx = require("xlsx")
 const fs = require('fs')
 
 
-
-const excel_output_writer = (uniqueChars, file_name, term) => {
+const excel_output_writer = (uniqueChars, file_name, term, merge_array = []) => {
     let newWb = xlsx.utils.book_new();
     let newWS = xlsx.utils.json_to_sheet(uniqueChars)
     xlsx.utils.book_append_sheet(newWb, newWS, "Sheet1");
@@ -12,6 +11,11 @@ const excel_output_writer = (uniqueChars, file_name, term) => {
     //     { s: { r: 1, c: 0 }, e: { r: 2, c: 0 } },{ s: { r: 3, c: 0 }, e: { r: 4, c: 0 } },
     // ];
     // newWS["!merges"] = merge;
+
+    if (merge_array.length !== 0) {
+
+        newWS["!merges"] = merge_array;
+    }
 
 
     const folderName = `../outputFiles/${term}`
@@ -24,8 +28,6 @@ const excel_output_writer = (uniqueChars, file_name, term) => {
     } catch (err) {
         console.error(err)
     }
-
-
 
 
     xlsx.writeFile(newWb, `../outputFiles/${term}/${file_name}`);
