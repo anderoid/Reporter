@@ -72,9 +72,7 @@ const course_hours_course_cordinator = (term, year) => {
         next_record = uniqueChars[j]
 
         while (j < uniqueChars.length && record["CourseName"] === uniqueChars[j]["CourseName"]) {
-
             j++;
-
         }
         start = i;
         end = j;
