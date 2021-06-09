@@ -1,6 +1,6 @@
 const course_hours_course_cordinator = (term, year) => {
 
-    console.log(`year in course_hours_course_cordinator = ${year}`)
+    // console.log(`year in course_hours_course_cordinator = ${year}`)
 
     const sortCode = require('../utils/sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
@@ -91,7 +91,7 @@ const course_hours_course_cordinator = (term, year) => {
 
 
     }
-    console.log(object_holder)
+    // console.log(object_holder)
     excel_outputWriter(uniqueChars, `${term} 2021 Course Hours with Coures Cordinator Final.xlsx`, term, object_holder)
 
 }
