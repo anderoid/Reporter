@@ -7,15 +7,44 @@ let new_data = require('../utils/term_data_returner')(term, year)
 let regex_number_space_remover = /.*\)(\s+)?/g;
 
 
-for (let i = 0; i < new_data.length; i++) {
+// for (let i = 0; i < new_data.length; i++) {
+//
+//     let hours_of_work_splitter = new_data[i]['Hours of Work'].split(",").map(item => {
+//         return Number(item.replace(regex_number_space_remover, ''))
+//     })
+//
+//     // console.log(hours_of_work_splitter)
+//
+//     let work_performed_split = new_data[i]['Work Performed'].split(",").map((item, index) => {
+//
+//         // console.log(`item = ${item}`)
+//
+//         let boomer = item.replace(regex_number_space_remover, '')
+//         // console.log(`Howdy - ${boomer}`)
+//
+//         if (isNaN(new_data[boomer])) {
+//             // console.log("Entered here for ", item)
+//             new_data[boomer] = 0
+//             new_data[boomer] += hours_of_work_splitter[index]
+//         } else {
+//             new_data[boomer] += hours_of_work_splitter[index]
+//         }
+//         return item.replace(regex_number_space_remover, '')
+//     })
+//     // let hours_of_work_split = new_data[i]['Hours of Work']
+//
+//     // console.log(work_performed_split)
+//     // console.log(hours_of_work_split)
+//
+//
+// }
 
-    let hours_of_work_splitter = new_data[i]['Hours of Work'].split(",").map(item => {
+new_data = new_data.map(record => {
+    let hours_of_work_splitter = record['Hours of Work'].split(",").map(item => {
         return Number(item.replace(regex_number_space_remover, ''))
     })
 
-    // console.log(hours_of_work_splitter)
-
-    let work_performed_split = new_data[i]['Work Performed'].split(",").map((item, index) => {
+    record = record['Work Performed'].split(",").map((item, index) => {
 
         // console.log(`item = ${item}`)
 
@@ -29,24 +58,18 @@ for (let i = 0; i < new_data.length; i++) {
         } else {
             new_data[boomer] += hours_of_work_splitter[index]
         }
-        return item.replace(regex_number_space_remover, '')
+
+        record[boomer] = new_data[boomer]
+        return record
     })
-    // let hours_of_work_split = new_data[i]['Hours of Work']
-
-    // console.log(work_performed_split)
-    // console.log(hours_of_work_split)
+    return record;
+})
 
 
-}
-
-let new_ob = []
+console.log(new_data)
 
 
-for (let i = 0; i < new_data.length; i++) {
 
-    console.log(new_data[i])
-
-}
 
 // new_data = new_data.map(record => {
 //     let sum = 0;
