@@ -17,6 +17,9 @@ const term_data_returner = (term, year) => {
         let month_of_time_log = record["Date"].getMonth()
         let year_of_time_log = record["Date"].getFullYear()
 
+
+
+
         // console.log(`type of year_of_time_log = ${typeof year_of_time_log}`)
         // console.log(`type of year = ${typeof year}`)
         //

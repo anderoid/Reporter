@@ -54,7 +54,7 @@ app.post('/my-file-catcher', (req, res) => {
         const term = req.query.term.toLowerCase()
         const year = Number(req.query.year)
 
-        console.log(`term : ${term} , year : ${year}`)
+        // console.log(`term : ${term} , year : ${year}`)
 
         let first_date = new Date();
 
