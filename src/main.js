@@ -70,11 +70,11 @@ app.post('/my-file-catcher', (req, res) => {
         async function code_runner() {
             await makeRequest()
             try {
+
                 const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(term, year)
                 const final_course_hours = require('./Spring 2021 Final Course Hours')(term, year)
                 const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(term, year)
                 const ta_work_performed_final = require('./TA Work Performed Final 21')(term, year)
-
                 res.send("ok")
             } catch (e) {
                 console.log("Incorrect File Sent here ")

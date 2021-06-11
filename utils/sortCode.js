@@ -1,6 +1,4 @@
-
 const sorter_code = (new_data, compare_text)=>{
-
     new_data = new_data.sort((a, b) => {
         // a should come before b in the sorted order
         if (a[compare_text] < b[compare_text]) {
@@ -13,10 +11,7 @@ const sorter_code = (new_data, compare_text)=>{
             return 0;
         }
     })
-
-
     return new_data
 }
-
 module.exports =  sorter_code ;
 

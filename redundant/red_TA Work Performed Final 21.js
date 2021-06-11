@@ -4,72 +4,69 @@ const excel_outputWriter = require('../utils/excel_util_output_writer.js')
 const term = 'spring', year = 2021
 let new_data = require('../utils/term_data_returner')(term, year)
 
-let regex_number_space_remover = /.*\)(\s+)?/g;
+
+console.log(`new_data.length = ${new_data.length}`)
+let regex_number_space_remover = /\d\)(\s+)?/g;
+let regex_number_space_remover_new = /(,\s+)?\d+\)(\s+)?/g;
+// let regex_number_space_remover = /.*\)(\s+)?|^[\s]+/g;
+
+// console.log(new_data)
+const bummer = []
+const randomer = []
+
+new_data = new_data.map((record, index) => {
 
 
-// for (let i = 0; i < new_data.length; i++) {
-//
-//     let hours_of_work_splitter = new_data[i]['Hours of Work'].split(",").map(item => {
-//         return Number(item.replace(regex_number_space_remover, ''))
-//     })
-//
-//     // console.log(hours_of_work_splitter)
-//
-//     let work_performed_split = new_data[i]['Work Performed'].split(",").map((item, index) => {
-//
-//         // console.log(`item = ${item}`)
-//
-//         let boomer = item.replace(regex_number_space_remover, '')
-//         // console.log(`Howdy - ${boomer}`)
-//
-//         if (isNaN(new_data[boomer])) {
-//             // console.log("Entered here for ", item)
-//             new_data[boomer] = 0
-//             new_data[boomer] += hours_of_work_splitter[index]
-//         } else {
-//             new_data[boomer] += hours_of_work_splitter[index]
-//         }
-//         return item.replace(regex_number_space_remover, '')
-//     })
-//     // let hours_of_work_split = new_data[i]['Hours of Work']
-//
-//     // console.log(work_performed_split)
-//     // console.log(hours_of_work_split)
-//
-//
-// }
+    if (record["Hours of Work"] !== undefined) {
+        let hours_of_work_splitter = record['Hours of Work'].split(",").map(item => {
 
-new_data = new_data.map(record => {
-    let hours_of_work_splitter = record['Hours of Work'].split(",").map(item => {
-        return Number(item.replace(regex_number_space_remover, ''))
-    })
+            return Number(item.replace(regex_number_space_remover, ''))
 
-    record = record['Work Performed'].split(",").map((item, index) => {
 
-        // console.log(`item = ${item}`)
+        })
 
-        let boomer = item.replace(regex_number_space_remover, '')
-        // console.log(`Howdy - ${boomer}`)
+        // record = record['Work Performed'].split(",").map((item, index) => {
+        record = record['Work Performed'].split(regex_number_space_remover_new).filter(item => {
+            return item !== ", " && item !== " " && item !== "" && item !== undefined;
+        }).map((item, index) => {
 
-        if (isNaN(new_data[boomer])) {
-            // console.log("Entered here for ", item)
-            new_data[boomer] = 0
-            new_data[boomer] += hours_of_work_splitter[index]
-        } else {
-            new_data[boomer] += hours_of_work_splitter[index]
-        }
 
-        record[boomer] = new_data[boomer]
-        return record
-    })
-    return record;
+            console.log(`item = ${item} , index : ${index}`)
+
+            let boomer = item.replace(regex_number_space_remover, '')
+            // console.log(`Howdy - ${boomer}`)
+
+            if (isNaN(new_data[boomer])) {
+                // console.log("Entered here for ", item)
+                new_data[boomer] = 0
+                new_data[boomer] += hours_of_work_splitter[index]
+            } else {
+                new_data[boomer] += hours_of_work_splitter[index]
+            }
+
+            record[boomer] = new_data[boomer]
+            bummer[boomer] = new_data[boomer]
+
+
+            return record
+        })
+        return record;
+    }
 })
 
 
-console.log(new_data)
+for (const [key, value] of Object.entries(bummer)) {
+    console.log(`${key}: ${value}`);
 
+    randomer.push(
+        {
+            WorkPerformed: key,
+            Hours: value
+        }
+    )
+}
 
-
+console.log(randomer)
 
 // new_data = new_data.map(record => {
 //     let sum = 0;
@@ -106,4 +103,4 @@ console.log(new_data)
 //     }
 // });
 
-// excel_outputWriter(new_data, `workers_perf.xlsx`, term)
+excel_outputWriter(randomer, `workers_perf.xlsx`, term)
