@@ -36,19 +36,6 @@ app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.post('/my-file-catcher', (req, res) => {
 
-    fs.readdir(path, function (err, files) {
-        if (err) {
-            return console.log('Unable to scan directory: ' + err);
-        }
-        files.forEach(function (file) {
-            try {
-                fs.unlinkSync(path + `/${file}`)
-            } catch (err) {
-                console.error(err)
-            }
-        });
-    });
-
 
     if (req.files) {
         const term = req.query.term.toLowerCase()
@@ -80,6 +67,19 @@ app.post('/my-file-catcher', (req, res) => {
                 console.log("Incorrect File Sent here ")
                 res.send("Incorrect File Format Detected")
             }
+
+            fs.readdir(path, function (err, files) {
+                if (err) {
+                    return console.log('Unable to scan directory: ' + err);
+                }
+                files.forEach(file => {
+                    try {
+                        fs.unlinkSync(path + `/${file}`)
+                    } catch (err) {
+                        console.error(err)
+                    }
+                });
+            });
         }
 
         code_runner()

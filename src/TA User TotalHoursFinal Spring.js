@@ -18,7 +18,7 @@ const TA_user_total_hours_final = (term, year) => {
         })
         record["First Name"] = first_name
         record["Last Name "] = last_name
-        record["Total  Hours"] = sum.toFixed(2)
+        record["Total  Hours"] = sum
         return record;
     })
     new_data = sortCode(new_data, "First Name")

@@ -26,7 +26,7 @@ const course_hours_course_cordinator = (term, year) => {
             }
             record["CourseName"] = record["Course Name"]
             record["CourseCoordinatorName"] = record["Coordinator Name"]
-            record["CourseHours"] = sum.toFixed(2)
+            record["CourseHours"] = sum
         }
         return record;
     })
