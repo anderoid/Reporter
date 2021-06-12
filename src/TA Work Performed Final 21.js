@@ -1,4 +1,4 @@
-const Ta_work_performedFinal = (term, year) => {
+const Ta_work_performedFinal = (new_data, term, year) => {
 
     console.log(`term = : ${term}, year = ${year}`)
 
@@ -7,12 +7,13 @@ const Ta_work_performedFinal = (term, year) => {
 
     // const term = 'fall', year = 2020
 
-    let new_data = require('../utils/term_data_returner')(term, year)
     // console.log(`new_data.length = ${new_data.length}`)
     let regex_number_space_remover_new = /(,\s+)?\d+\)(\s+)?/g;
 
     const bummer = []
     const randomer = []
+
+    new_data = sortCode(new_data, "CourseName")
 
     new_data = new_data.map((record, index) => {
         if (record["Hours of Work"] !== undefined) {
@@ -47,8 +48,14 @@ const Ta_work_performedFinal = (term, year) => {
             }
         )
     }
-    console.log(randomer)
-    excel_outputWriter(randomer, `TA Work Performed Final 21.xlsx`, term)
+    // console.log(randomer)
+    excel_outputWriter(randomer, {
+        course_name: `TA Work Performed Final 21`,
+        term: term,
+        year: year
+    });
+
+    // excel_outputWriter(randomer, `TA Work Performed Final 21.xlsx`, term)
 
 }
 

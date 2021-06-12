@@ -2,8 +2,8 @@ const fileUpload = require('express-fileupload')
 const express = require('express')
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
+const bodyParser = require('body-parser');
 const fs = require("fs");
-
 
 const app = express()
 
@@ -41,25 +41,32 @@ app.post('/my-file-catcher', (req, res) => {
         const term = req.query.term.toLowerCase()
         const year = Number(req.query.year)
 
-        console.log(`term : ${term} , year : ${year}`)
+        // console.log(`term : ${term} , year : ${year}`)
 
         let first_date = new Date();
+
 
         const makeRequest = () => {
             return new Promise((resolve, reject) => {
                 const file = req.files.file;
                 const filename = file.name;
-                console.log(`filename = ${filename}`)
                 resolve(file.mv(`../mainFile/${filename}`))
             })
         }
 
-        // The following is the asynchronous wait code
         async function code_runner() {
             await makeRequest()
-            let new_data = require('../utils/term_data_returner')(term, year)
+            try {
 
-            console.log(`yo `,new_data)
+                const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(term, year)
+                const final_course_hours = require('./Spring 2021 Final Course Hours')(term, year)
+                const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(term, year)
+                const ta_work_performed_final = require('./TA Work Performed Final 21')(term, year)
+                res.send("ok")
+            } catch (e) {
+                console.log("Incorrect File Sent here ")
+                res.send("Incorrect File Format Detected")
+            }
 
             fs.readdir(path, function (err, files) {
                 if (err) {
@@ -73,21 +80,6 @@ app.post('/my-file-catcher', (req, res) => {
                     }
                 });
             });
-
-            // try {
-
-
-            const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(new_data, term, year)
-            const final_course_hours = require('./Spring 2021 Final Course Hours')(new_data, term, year)
-            const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(new_data, term, year)
-            const ta_work_performed_final = require('./TA Work Performed Final 21')(new_data, term, year)
-            res.send("ok")
-            // } catch (e) {
-            //     console.log("Incorrect File Sent here ")
-            //     res.send("Incorrect File Format Detected")
-            // }
-
-
         }
 
         code_runner()

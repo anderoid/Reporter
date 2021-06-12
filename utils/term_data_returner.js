@@ -1,9 +1,9 @@
-let data = require('./excel_util_import.js')()
-let term_info = require('./term_info.js')()
-
-let start_month, end_month
-
 const term_data_returner = (term, year) => {
+
+    let data = require('./excel_util_import.js')()
+    let term_info = require('./term_info.js')()
+
+    let start_month, end_month
 
     term_info.forEach(termer => {
         if (termer.term === term) {
@@ -16,8 +16,6 @@ const term_data_returner = (term, year) => {
     return data.filter(record => {
         let month_of_time_log = record["Date"].getMonth()
         let year_of_time_log = record["Date"].getFullYear()
-
-
 
 
         // console.log(`type of year_of_time_log = ${typeof year_of_time_log}`)
