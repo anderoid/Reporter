@@ -8,8 +8,8 @@ const fs = require("fs");
 const app = express()
 
 app.use(fileUpload())
-// const port = process.env.PORT || 5000;
-const port = process.env.PORT ;
+const port = process.env.PORT || 5000;
+// const port = process.env.PORT ;
 
 
 const path = '../mainFile'
@@ -23,8 +23,8 @@ const swaggerOptions = {
             contact: {
                 name: `Surya Kurella`
             },
-            // servers: [`http://localhost:5000/my-file-catcher`]
-            servers: [`https://ta-auto-generation-tool.herokuapp.com//my-file-catcher`]
+            servers: [`http://localhost:5000/my-file-catcher`]
+            // servers: [`https://ta-auto-generation-tool.herokuapp.com//my-file-catcher`]
         }
     },
     apis: ["main.js"]
