@@ -37,8 +37,6 @@ const final_course_hours = (new_data, term, year) => {
         term: term,
         year: year
     }, []);
-
-    // excel_outputWriter(uniqueChars, `${term} 2021 Final Course Hours .xlsx`, term)
 }
 
 module.exports = final_course_hours

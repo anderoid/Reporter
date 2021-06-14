@@ -5,18 +5,6 @@ let xlsx = require("xlsx")
 const excel_utils = ()=> {
     let main_directory_file_xcel_path = path.join(__dirname, '..', 'mainFile')
 
-    // wait(40000)
-    // function wait(ms) {
-    //     var start = Date.now(),
-    //         now = start;
-    //     while (now - start < ms) {
-    //         now = Date.now();
-    //     }
-    // }
-
-
-
-
     const files = fs.readdirSync(main_directory_file_xcel_path)
 
     for (const file of files) {
@@ -29,13 +17,6 @@ const excel_utils = ()=> {
 
     let wb = xlsx.readFile(main_directory_file_xcel_path, {cellDates: true})
     let ws = wb.Sheets["Sheet1"]
-
-
-
-
-
-
-
 
     return xlsx.utils.sheet_to_json(ws)
 }

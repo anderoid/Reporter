@@ -47,8 +47,6 @@ const TA_user_total_hours_final = (new_data, term, year) => {
         term: term,
         year: year
     }, []);
-
-    // excel_outputWriter(uniqueChars, `TA User TotalHoursFinal ${term}.xlsx`, term)
 }
 
 module.exports = TA_user_total_hours_final

@@ -4,16 +4,10 @@ const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const fs = require("fs");
 
-
 const app = express()
-
 app.use(fileUpload())
 const port = process.env.PORT || 5000;
-// const port = process.env.PORT ;
-
-
 const path = '../mainFile'
-
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -24,34 +18,24 @@ const swaggerOptions = {
                 name: `Surya Kurella`
             },
             servers: [`http://localhost:5000/my-file-catcher`]
-            // servers: [`https://ta-auto-generation-tool.herokuapp.com//my-file-catcher`]
         }
     },
     apis: ["main.js"]
 }
-
-
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 app.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
-
+// post
 app.post('/my-file-catcher', (req, res) => {
-
-
     if (req.files) {
         const term = req.query.term.toLowerCase()
         const year = Number(req.query.year)
 
-        console.log(`term : ${term} , year : ${year}`)
-
-        let first_date = new Date();
-
+        //here we get the data uploaded from swagger uI to backend mainFile Folder
         const makeRequest = () => {
             return new Promise((resolve, reject) => {
                 const file = req.files.file;
                 const filename = file.name;
-                console.log(`filename = ${filename}`)
                 resolve(file.mv(`../mainFile/${filename}`))
             })
         }
@@ -61,7 +45,7 @@ app.post('/my-file-catcher', (req, res) => {
             await makeRequest()
             let new_data = require('../utils/term_data_returner')(term, year)
 
-            console.log(`yo `,new_data)
+            console.log(`yo `, new_data)
 
             fs.readdir(path, function (err, files) {
                 if (err) {
@@ -76,38 +60,26 @@ app.post('/my-file-catcher', (req, res) => {
                 });
             });
 
-            // try {
-
-
-            const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(new_data, term, year)
-            const final_course_hours = require('./Spring 2021 Final Course Hours')(new_data, term, year)
-            const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(new_data, term, year)
-            const ta_work_performed_final = require('./TA Work Performed Final 21')(new_data, term, year)
-            res.send("ok")
-            // } catch (e) {
-            //     console.log("Incorrect File Sent here ")
-            //     res.send("Incorrect File Format Detected")
-            // }
-
-
+            try {
+                const course_hours_course_cordinator = require('./Spring 2021 Course Hours with Coures Cordinator Final')(new_data, term, year)
+                const final_course_hours = require('./Spring 2021 Final Course Hours')(new_data, term, year)
+                const ta_user_total_hoursFinal = require('./TA User TotalHoursFinal Spring')(new_data, term, year)
+                const ta_work_performed_final = require('./TA Work Performed Final 21')(new_data, term, year)
+                res.send("ok")
+            } catch (e) {
+                console.log("Incorrect File Sent here ")
+                res.send("Incorrect File Format Detected")
+            }
         }
 
         code_runner()
-
-
         let last_date = new Date();
-
         console.log(`files generated in ${last_date - first_date} ms`)
     }
 })
-
-
 app.listen(port, () => {
-
-
     console.log(`Server is listening on port ${port}`)
 })
-
 
 /**
  * @swagger

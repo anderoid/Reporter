@@ -1,13 +1,6 @@
 const Ta_work_performedFinal = (new_data, term, year) => {
-
-    console.log(`term = : ${term}, year = ${year}`)
-
     const sortCode = require('../utils/sortCode')
     const excel_outputWriter = require('../utils/excel_util_output_writer.js')
-
-    // const term = 'fall', year = 2020
-
-    // console.log(`new_data.length = ${new_data.length}`)
     let regex_number_space_remover_new = /(,\s+)?\d+\)(\s+)?/g;
 
     const bummer = []
@@ -15,10 +8,9 @@ const Ta_work_performedFinal = (new_data, term, year) => {
 
     new_data = sortCode(new_data, "CourseName")
 
-    new_data = new_data.map((record, index) => {
+    new_data = new_data.map(record => {
         if (record["Hours of Work"] !== undefined) {
             let hours_of_work_splitter = record['Hours of Work'].split(",").map(item => {
-                // console.log(record['Hours of Work'], Number(item.replace(regex_number_space_remover_new, '')))
                 return Number(item.replace(regex_number_space_remover_new, ''))
             })
             record = record['Work Performed'].split(regex_number_space_remover_new).filter(item => {
@@ -38,9 +30,7 @@ const Ta_work_performedFinal = (new_data, term, year) => {
             return record;
         }
     })
-
     for (const [key, value] of Object.entries(bummer)) {
-        // console.log(`${key}: ${value}`);
         randomer.push(
             {
                 WorkPerformed: key,
@@ -48,15 +38,10 @@ const Ta_work_performedFinal = (new_data, term, year) => {
             }
         )
     }
-    // console.log(randomer)
     excel_outputWriter(randomer, {
         course_name: `TA Work Performed Final 21`,
         term: term,
         year: year
     });
-
-    // excel_outputWriter(randomer, `TA Work Performed Final 21.xlsx`, term)
-
 }
-
 module.exports = Ta_work_performedFinal
