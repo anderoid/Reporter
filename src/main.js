@@ -15,7 +15,7 @@ const swaggerOptions = {
             title: 'UH College of Pharmacy TA Hours Auto Generation Tool',
             description: 'This tool can generate 4 files based on a TA Input File',
             contact: {
-                name: `Surya Kurella`
+                name: `BB`
             },
             servers: [`http://localhost:5000/my-file-catcher`]
         }
